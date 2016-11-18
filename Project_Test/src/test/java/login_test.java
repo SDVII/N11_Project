@@ -56,6 +56,9 @@ public class login_test {
             driver.switchTo().window(mainWinID);
             Thread.sleep(5000);
 
+            //Asserting login
+            assertEquals(driver.findElement(By.xpath("//a[@class='username']")).getText(),"Henry Doe");
+
             //Traversing and Asserting
             pressAndCheck(By.cssSelector("li.catMenuItem > a[title=\"Kitap, Müzik, Film, Oyun\"]"),"Kitap, Müzik, Film, Oyun - PS4, Oyuncak, Puzzle - n11.com");
             pressAndCheck(By.cssSelector("li.mainCat > a[title=\"Kitap\"]"),"Kitap - n11.com");
