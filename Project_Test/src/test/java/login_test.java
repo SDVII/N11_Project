@@ -56,17 +56,10 @@ public class login_test {
             driver.switchTo().window(mainWinID);
             Thread.sleep(5000);
 
-            //Opening the Kitap,Muzik,Film, Oyun Category and asserting the title
-            driver.findElement(By.cssSelector("li.catMenuItem > a[title=\"Kitap, Müzik, Film, Oyun\"]")).click();
-            assertEquals("Kitap, Müzik, Film, Oyun - PS4, Oyuncak, Puzzle - n11.com", driver.getTitle());
-
-            //Opening the Kitap Sub-Category and asserting the title
-            driver.findElement(By.cssSelector("li.mainCat > a[title=\"Kitap\"]")).click();
-            assertEquals("Kitap - n11.com", driver.getTitle());
-
-            //Pressing the Yazarlar link and asserting the title
-            driver.findElement(By.linkText("Yazarlar")).click();
-            assertEquals("Yazarlar - Türk ve Yabancı Yazarlar - n11.com", driver.getTitle());
+            //Traversing and Asserting
+            pressAndCheck(By.cssSelector("li.catMenuItem > a[title=\"Kitap, Müzik, Film, Oyun\"]"),"Kitap, Müzik, Film, Oyun - PS4, Oyuncak, Puzzle - n11.com");
+            pressAndCheck(By.cssSelector("li.mainCat > a[title=\"Kitap\"]"),"Kitap - n11.com");
+            pressAndCheck(By.linkText("Yazarlar"),"Yazarlar - Türk ve Yabancı Yazarlar - n11.com");
 
             //Checking the listing validity
             List<WebElement> alphabetList =  driver.findElements(By.xpath("//div[@class='alphabetPaging']/span"));
@@ -90,16 +83,7 @@ public class login_test {
                     }
 
                     //Checking for navigation & Checking the first author from the 1st and 2nd navigation page
-                    if (authorList.size()>=80)
-                    {
-                        String firstAuthor = driver.findElement(By.xpath("//div[@id='authorsList']/div/ul/li[1]")).getText();
-                        driver.findElement(By.xpath("//div[@class='pagination']/a[2]")).click();
-                        String secondAuthor = driver.findElement(By.xpath("//div[@id='authorsList']/div/ul/li[1]")).getText();
-
-                        //Check
-                        assertNotEquals(firstAuthor, secondAuthor);
-                        //System.out.println(firstAuthor + " =/=" + secondAuthor);
-                    }
+                    paginationValidation(authorList.size());
                 }
 
                 //Other Alphabetic credentials
@@ -120,18 +104,7 @@ public class login_test {
                             Assert.fail("Wrong Credentials");
                     }
 
-                    //Checking for navigation & Checking the first author from the 1st and 2nd navigation page
-                    if (authorList.size()>=80)
-                    {
-                        String firstAuthor = driver.findElement(By.xpath("//div[@id='authorsList']/div/ul/li[1]")).getText();
-                        driver.findElement(By.xpath("//div[@class='pagination']/a[2]")).click();
-                        String secondAuthor = driver.findElement(By.xpath("//div[@id='authorsList']/div/ul/li[1]")).getText();
-
-                        //Check
-                        assertNotEquals(firstAuthor, secondAuthor);
-                        //System.out.println(firstAuthor + " =/=" + secondAuthor);
-                    }
-
+                    paginationValidation(authorList.size());
 
                 }
 
@@ -145,6 +118,28 @@ public class login_test {
             String verificationErrorString = verificationErrors.toString();
             if (!"".equals(verificationErrorString)) {
                 fail(verificationErrorString);
+            }
+        }
+
+        public void pressAndCheck(By by , String title)
+        {
+            //Opening the Kitap,Muzik,Film, Oyun Category and asserting the title
+            driver.findElement(by).click();
+            assertEquals(title, driver.getTitle());
+        }
+
+        //Checking for navigation & Checking the first author from the 1st and 2nd navigation page
+        public void paginationValidation(int listSize)
+        {
+            if (listSize>=80)
+            {
+                String firstAuthor = driver.findElement(By.xpath("//div[@id='authorsList']/div/ul/li[1]")).getText();
+                driver.findElement(By.xpath("//div[@class='pagination']/a[2]")).click();
+                String secondAuthor = driver.findElement(By.xpath("//div[@id='authorsList']/div/ul/li[1]")).getText();
+
+                //Check
+                assertNotEquals(firstAuthor, secondAuthor);
+                //System.out.println(firstAuthor + " =/=" + secondAuthor);
             }
         }
 
